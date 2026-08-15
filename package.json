@@ -1,0 +1,49 @@
+{
+  "name": "dsh-memory-kit",
+  "version": "0.1.0",
+  "description": "Persistent memory + learning loop for DeepSeek Harness: MEMORY.md index + notes/ library auto-injected at session start, keyword search (rg), optional semantic search (local embedding), trap library with 3-tier rule escalation. Zero heavy deps; LM Studio optional for semantic/vision.",
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/index.js",
+  "bin": {
+    "dsh-memory-kit": "lib/setup.js"
+  },
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "scripts",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh-hook-protocol": "^0.0.1-rc.1",
+    "@deepseek-ai/dsh-hooks-claude-code": "^0.0.1-rc.5"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "memory",
+    "memdir",
+    "plugin",
+    "trap-library",
+    "learning"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mozhewuxiang/dsh-memory-kit"
+  }
+}

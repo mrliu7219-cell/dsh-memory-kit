@@ -1,0 +1,8 @@
+# dsh-memory-kit — 记忆/学习插件（bundle 补丁层）
+# 复用 DSH 内置的 hooks-claude-code 机制，configPath 用 !!js 动态解析 HOME
+# （插件包不能写死绝对路径）。hook 文件由 `dsh-memory-kit setup` 生成。
+- insert:
+    - id: hooks-claude-code
+      name: '@deepseek-ai/dsh-hooks-claude-code'
+      config:
+        configPath: !!js (process.env.HOME || '/') + '/.dsh/memory-kit/hooks.json'
