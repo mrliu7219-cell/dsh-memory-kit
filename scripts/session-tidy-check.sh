@@ -22,9 +22,8 @@ if [ -f "$MEM" ]; then
   fi
 fi
 
-# 2. 向量索引过期检查（notes 最新 mtime vs 索引生成时间）
+# 2. 向量索引过期检查（notes 最新 mtime vs 索引生成时间；find -newer 跨平台通用）
 if [ -f "$IDX" ]; then
-  IDX_TIME=$(stat -f '%m' "$IDX")
   NEWEST=$(find "$NOTES" -name "*.md" -type f -newer "$IDX" 2>/dev/null | wc -l | tr -d ' ')
   if [ "$NEWEST" -gt 0 ]; then
     echo "ℹ️ 有 $NEWEST 个 notes 文件在向量索引之后变更，可跑 notes-embed.sh 刷新索引。" >&2

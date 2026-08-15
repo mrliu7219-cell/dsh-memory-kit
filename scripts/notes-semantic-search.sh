@@ -33,8 +33,15 @@ if [ ! -f "$INDEX" ]; then
 fi
 
 # 服务就绪：LM Studio 未启动则拉起；未安装则优雅降级提示
-LMS_BIN="$HOME/.lmstudio/bin/lms"
-if [ ! -x "$LMS_BIN" ]; then
+# LM Studio CLI 路径探测（跨平台：macOS/Linux 与 Windows Git-Bash；${VAR:-} 兼容 set -u）
+find_lms() {
+  for cand in "$HOME/.lmstudio/bin/lms" "${USERPROFILE:-}/.lmstudio/bin/lms" "${LOCALAPPDATA:-}/Programs/LM Studio/bin/lms" "$HOME/AppData/Local/Programs/LM Studio/bin/lms"; do
+    if [ -x "$cand" ] || [ -f "$cand" ]; then echo "$cand"; return 0; fi
+  done
+  return 1
+}
+LMS_BIN=$(find_lms)
+if [ -z "$LMS_BIN" ]; then
   echo "未检测到 LM Studio。语义搜索需要本机 embedding 服务（可选）：" >&2
   echo "  1. 安装 LM Studio（lmstudio.ai）并下载 bge-small-zh-v1.5" >&2
   echo "  2. 跑: dsh-memory-kit setup --semantic" >&2

@@ -34,10 +34,19 @@ log() { [ "$QUIET" = "0" ] && echo "$*" >&2; }
 
 [ -d "$NOTES" ] || fail "notes 目录不存在: $NOTES"
 
+# LM Studio CLI 路径探测（跨平台：macOS/Linux 与 Windows Git-Bash；${VAR:-} 兼容 set -u）
+find_lms() {
+  for cand in "$HOME/.lmstudio/bin/lms" "${USERPROFILE:-}/.lmstudio/bin/lms" "${LOCALAPPDATA:-}/Programs/LM Studio/bin/lms" "$HOME/AppData/Local/Programs/LM Studio/bin/lms"; do
+    if [ -x "$cand" ] || [ -f "$cand" ]; then echo "$cand"; return 0; fi
+  done
+  return 1
+}
+
 # 服务就绪（幂等拉起）
 api_ready() { curl -s --max-time 2 "http://localhost:${PORT}/v1/models" >/dev/null 2>&1; }
 if ! api_ready; then
-  "$HOME/.lmstudio/bin/lms" server start -p "$PORT" >/dev/null 2>&1 &
+  LMS_BIN=$(find_lms) || { fail "未找到 LM Studio CLI（lms），请先安装 LM Studio 或手动启动服务"; }
+  "$LMS_BIN" server start -p "$PORT" >/dev/null 2>&1 &
   for _ in $(seq 1 25); do
     api_ready && break
     sleep 2
