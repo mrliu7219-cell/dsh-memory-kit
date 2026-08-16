@@ -12,14 +12,21 @@ PORT="${VISION_PORT:-1235}"
 MODEL=""
 TOP_N=3
 
-# 解析 -n
+# 解析 -n（从参数中剔除，位置无关：<查询> -n 3 与 -n 3 <查询> 均可）
+ARGS=()
 while [ $# -gt 0 ]; do
   case "$1" in
-    -n) TOP_N="${2:-3}"; shift 2 ;;
-    *) break ;;
+    -n)
+      TOP_N="${2:-3}"
+      shift 2
+      ;;
+    *)
+      ARGS+=("$1")
+      shift
+      ;;
   esac
 done
-QUERY="${*:-}"
+QUERY="${ARGS[*]:-}"
 [ -n "$QUERY" ] || { echo "用法: notes-semantic-search.sh <查询> [-n 数量]" >&2; exit 1; }
 
 # 索引存在？

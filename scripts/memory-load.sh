@@ -20,6 +20,8 @@ line_count = content.count("\n") + 1
 warn = ""
 if line_count > 180:
     warn = f"\n⚠️ 记忆索引已 {line_count} 行（上限 200），建议整理合并。"
+elif line_count > 150:
+    warn = f"\n⚠️ 记忆索引 {line_count} 行，接近上限（200），留意整理。"
 header = (
     "【记忆索引】以下为本机持久记忆索引（MEMORY.md），每次会话开始时自动加载。"
     "需要细节时用 read 读取 notes/ 对应文件；重要新事实、用户偏好、关键决策应写入记忆"
