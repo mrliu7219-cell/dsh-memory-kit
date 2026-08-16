@@ -9,7 +9,7 @@
 | 能力 | 依赖 | 说明 |
 |---|---|---|
 | **记忆注入** | 零依赖 | SessionStart 自动注入 MEMORY.md 索引，notes/ 按需读取 |
-| **踩坑库** | 零依赖 | traps.md 三档状态（🆕新鲜/✅已验证/⬆️已升级），犯 2 次升级 AGENTS.md |
+| **踩坑库** | 零依赖 | traps.md 三档状态（🆕新鲜/✅已验证/⬆️已升级）+ Lesson≠Skill 纪律（只记失败经验）+ 可选证据等级标注，犯 2 次升级 AGENTS.md |
 | **关键词搜索** | rg（可先装） | `notes-search.sh <词>`，19ms 全文检索 |
 | **语义搜索**（可选） | LM Studio + bge-small-zh | `notes-semantic-search.sh <描述>`，本地 embedding 不联网 |
 | **视觉识图**（可选） | LM Studio + 多模态模型 | 需另配 modlens 等视觉插件，本插件不内置 |
