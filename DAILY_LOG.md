@@ -38,6 +38,12 @@
 - **增强** memory-load.sh 补 150 行预警（对齐本机母本版；原只有 >180 行告警）
 - 隔离回归：全新 home 安装 + 二次运行幂等（SessionStart/Stop 各 1 group）+ 已有同名脚本不重复 + 无同名正常追加，全过
 
+### v0.1.4 — 语义索引主动刷新（完成）
+- **改被动为主动**：session-tidy-check.sh 检测到 notes 有变更 → 自动静默增量刷新索引（`notes-embed.sh -q`），成功提示、失败才降级提醒（未装 LM Studio 场景）
+- 索引不存在时也尝试自动生成；无 embed 脚本（如仅关键词搜索用户）保持原提醒
+- 验证：索引最新时无输出不打扰 / 有变更自动刷新（updated 时间戳更新）/ 隔离 MEMORY_DIR 测试不碰本机数据
+- 同步部署本机 `~/.dsh/scripts/session-tidy-check.sh`
+
 ## 待办（未定节奏）
 - [ ] npm 发布（等 GitHub 反馈或自己用稳）
 - [ ] 真实用户安装反馈收集

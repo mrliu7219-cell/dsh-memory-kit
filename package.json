@@ -1,6 +1,6 @@
 {
   "name": "dsh-memory-kit",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Persistent memory + learning loop for DeepSeek Harness: MEMORY.md index + notes/ library auto-injected at session start, keyword search (rg), optional semantic search (local embedding), trap library with 3-tier rule escalation. Zero heavy deps; LM Studio optional for semantic/vision.",
   "license": "MIT",
   "type": "module",

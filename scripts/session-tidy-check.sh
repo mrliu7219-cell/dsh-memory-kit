@@ -23,13 +23,34 @@ if [ -f "$MEM" ]; then
 fi
 
 # 2. 向量索引过期检查（notes 最新 mtime vs 索引生成时间；find -newer 跨平台通用）
+# 主动模式（2026-08-17）：检测到有变更 → 自动静默增量刷新索引（notes-embed.sh -q，
+# 增量只重算变更文件）；自动刷新失败（如未装 LM Studio）才降级为提醒。
 if [ -f "$IDX" ]; then
   NEWEST=$(find "$NOTES" -name "*.md" -type f -newer "$IDX" 2>/dev/null | wc -l | tr -d ' ')
   if [ "$NEWEST" -gt 0 ]; then
-    echo "ℹ️ 有 $NEWEST 个 notes 文件在向量索引之后变更，可跑 notes-embed.sh 刷新索引。" >&2
+    EMBED="$(dirname "$0")/notes-embed.sh"
+    if [ -f "$EMBED" ]; then
+      if bash "$EMBED" -q 2>/dev/null; then
+        echo "✓ 已自动刷新语义索引（$NEWEST 个文件变更）。" >&2
+      else
+        echo "ℹ️ 语义索引过期（$NEWEST 个文件变更），自动刷新失败（需 LM Studio），可手动跑 notes-embed.sh。" >&2
+      fi
+    else
+      echo "ℹ️ 有 $NEWEST 个 notes 文件在向量索引之后变更，可跑 notes-embed.sh 刷新索引。" >&2
+    fi
   fi
 else
-  echo "ℹ️ 向量索引不存在，可跑 notes-embed.sh 生成（供语义搜索）。" >&2
+  # 索引不存在：尝试自动生成（仅当 embed 脚本存在）
+  EMBED="$(dirname "$0")/notes-embed.sh"
+  if [ -f "$EMBED" ]; then
+    if bash "$EMBED" -q 2>/dev/null; then
+      echo "✓ 已自动生成语义索引。" >&2
+    else
+      echo "ℹ️ 向量索引不存在，自动生成失败（需 LM Studio），可跑 notes-embed.sh 生成。" >&2
+    fi
+  else
+    echo "ℹ️ 向量索引不存在，可跑 notes-embed.sh 生成（供语义搜索）。" >&2
+  fi
 fi
 
 exit 0
